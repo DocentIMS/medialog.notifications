@@ -6,4 +6,10 @@
   <adapter factory=".notify_users_index.notify_usersIndexer"
     name="notify_users" />
 
+  <adapter
+      name="user_not_in_notification_assigned"
+      factory=".notify_users_index.user_not_in_notification_assigned"
+      provides="plone.indexer.interfaces.IIndexer"
+      />  
+
 </configure>

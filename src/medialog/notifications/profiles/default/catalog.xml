@@ -9,9 +9,13 @@
   <index name="notification_type" meta_type="FieldIndex">
     <indexed_attr value="notification_type"/>
   </index>
+  <index name="user_not_in_notification_assigned" meta_type="FieldIndex">
+    <indexed_attr value="user_not_in_notification_assigned"/>
+  </index> 
 
   <column value="notify_users"/>
   <column value="notification_type"/>
   <column value="notification_assigned"/>
+  <column value="user_not_in_notification_assigned" />
 
 </object>

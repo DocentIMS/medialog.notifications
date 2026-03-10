@@ -53,3 +53,12 @@ def notify_usersIndexer(obj):
     if users:
         user_list = [item for sublist in users for item in (sublist if isinstance(sublist, list) else [sublist])]
         return user_list
+    
+    
+@indexer(INotification)
+def user_not_in_notification_assigned(obj):
+    user = api.user.get_current()
+    if not user:
+        return False
+    return user.getId() not in getattr(obj, 'notification_assigned', [])  
+ 
