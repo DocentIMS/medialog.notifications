@@ -55,9 +55,7 @@ def handler(obj, event):
             username=user_id,
             obj=obj,
             roles=['Reader'],
-        )
-    
-                               
+        )                      
     
     time_filter= obj.time_filter
     if time_filter:
