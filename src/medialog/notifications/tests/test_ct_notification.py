@@ -45,7 +45,6 @@ class NotificationIntegrationTest(unittest.TestCase):
         )
 
     def test_ct_notification_adding(self):
-        setRoles(self.portal, TEST_USER_ID, ["Contributor"])
         obj = api.content.create(
             container=self.portal,
             type="Notification",
@@ -67,6 +66,5 @@ class NotificationIntegrationTest(unittest.TestCase):
         self.assertNotIn("notification", parent.objectIds())
 
     def test_ct_notification_globally_addable(self):
-        setRoles(self.portal, TEST_USER_ID, ["Contributor"])
         fti = queryUtility(IDexterityFTI, name="Notification")
         self.assertTrue(fti.global_allow, "{0} is not globally addable!".format(fti.id))

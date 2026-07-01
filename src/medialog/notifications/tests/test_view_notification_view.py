@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+from medialog.notifications.interfaces import IMedialogNotificationsLayer
 from medialog.notifications.testing import MEDIALOG_NOTIFICATIONS_FUNCTIONAL_TESTING
 from medialog.notifications.testing import MEDIALOG_NOTIFICATIONS_INTEGRATION_TESTING
 from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from zope.component import getMultiAdapter
+from zope.interface import alsoProvides
 from zope.interface.interfaces import ComponentLookupError
 
 import unittest
@@ -17,18 +19,16 @@ class ViewsIntegrationTest(unittest.TestCase):
     def setUp(self):
         self.portal = self.layer["portal"]
         setRoles(self.portal, TEST_USER_ID, ["Manager"])
-        api.content.create(self.portal, "Folder", "other-folder")
+        alsoProvides(self.portal.REQUEST, IMedialogNotificationsLayer)
+        api.content.create(self.portal, "Notification", "my-notification")
         api.content.create(self.portal, "Document", "front-page")
 
     def test_notification_view_is_registered(self):
         view = getMultiAdapter(
-            (self.portal["other-folder"], self.portal.REQUEST), name="notification-view"
+            (self.portal["my-notification"], self.portal.REQUEST),
+            name="notification-view",
         )
         self.assertTrue(view.__name__ == "notification-view")
-        # self.assertTrue(
-        #     'Sample View' in view(),
-        #     'Sample View is not found in notification-view'
-        # )
 
     def test_notification_view_not_matching_interface(self):
         with self.assertRaises(ComponentLookupError):
