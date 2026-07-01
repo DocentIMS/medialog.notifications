@@ -15,6 +15,7 @@
       description="Notify user when @username is mentioned"
       provides=".mentioning_behavior.IMentioningBehavior"
       marker=".mentioning_behavior.IMentioningBehaviorMarker"
+      factory=".mentioning_behavior.MentioningBehavior"
   />
 
 </configure>
