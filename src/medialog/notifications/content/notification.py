@@ -18,11 +18,9 @@ from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.interface import provider
 from zope.interface import Interface
 
-
-
 PATTERN_OPTIONS = {
     "tiny": {
-            "menu": {
+        "menu": {
             "edit": {
                 "items": "undo redo",
                 "title": "Edit",
@@ -55,7 +53,7 @@ PATTERN_OPTIONS = {
             "pagebreak",
             "paste",
             "code",
-            "link"
+            "link",
         ],
         "style_formats": [
             {
@@ -142,32 +140,31 @@ PATTERN_OPTIONS = {
             },
         ],
         "height": 200,
-    
     }
-} 
+}
 
 
 @provider(IContextAwareDefaultFactory)
 def notify_to(context=None):
     """Default factory for the to field."""
     request = getRequest()
-    notify_to = request.get('notify_to', None)  # Get 'date' parameter from request
+    notify_to = request.get("notify_to", None)  # Get 'date' parameter from request
     if notify_to:
-        notify_tos =  notify_to.split(',')
+        notify_tos = notify_to.split(",")
         valid_users = set()
         for to in notify_tos:
             to = to.strip()
-            if to != 'admin':                
+            if to != "admin":
                 if api.user.get(userid=to):
-                    valid_users.add(to)        
+                    valid_users.add(to)
         return valid_users
     return None  # Fallback i
+
 
 def filter_factory(context=None):
     if notify_to():
         return False
     return True
-
 
 
 def filter_factory(context=None):
@@ -177,8 +174,8 @@ def filter_factory(context=None):
 
 
 class INotification(model.Schema):
-    """ Marker interface and Dexterity Python Schema for Notification
-    """
+    """Marker interface and Dexterity Python Schema for Notification"""
+
     # If you want, you can load a xml model created TTW here
     # and customize it in Python:
     # model.load('notification.xml')
@@ -193,127 +190,124 @@ class INotification(model.Schema):
         required=True,
         default="info",
     )
-    
-    
+
     directives.widget(
         "message",
         RichTextFieldWidget,
         pattern_options=PATTERN_OPTIONS,
     )
-    
-    read_permission(message='cmf.ModifyPortalContent')
-    write_permission(message='cmf.ModifyPortalContent')
+
+    read_permission(message="cmf.ModifyPortalContent")
+    write_permission(message="cmf.ModifyPortalContent")
     message = RichText(
         title=_("Message Text"),
-        description=_("The message shown to the user. NOTE: You can use  '${}' variables (see below))"),
+        description=_(
+            "The message shown to the user. NOTE: You can use  '${}' variables (see below))"
+        ),
         required=True,
     )
-    
-    read_permission(user_filter='cmf.ModifyPortalContent')
-    write_permission(user_filter='cmf.ModifyPortalContent')
+
+    read_permission(user_filter="cmf.ModifyPortalContent")
+    write_permission(user_filter="cmf.ModifyPortalContent")
     user_filter = schema.Bool(
         title=_("label_user_filter", default="Notify all"),
         description=_("label_user_filter_desc", default="Notify Everybody"),
         defaultFactory=filter_factory,
         required=False,
     )
-    
-    read_permission( notify_users='cmf.ModifyPortalContent')
-    write_permission( notify_users='cmf.ModifyPortalContent')
+
+    read_permission(notify_users="cmf.ModifyPortalContent")
+    write_permission(notify_users="cmf.ModifyPortalContent")
     notify_users = schema.Set(
         title=_("label_notify_users", default="Notify Users"),
         description=_("label_notify_users_desc", default="Notify Specific Members"),
         required=False,
         value_type=schema.Choice(vocabulary="plone.app.vocabularies.Users"),
-        defaultFactory=notify_to
+        defaultFactory=notify_to,
     )
-    
-    read_permission(notify_groups='cmf.ModifyPortalContent')
-    write_permission(notify_groups='cmf.ModifyPortalContent')
+
+    read_permission(notify_groups="cmf.ModifyPortalContent")
+    write_permission(notify_groups="cmf.ModifyPortalContent")
     notify_groups = schema.Set(
         title=_("label_notify_groups", default="Notify Groups"),
         description=_("label_notify_groups_desc", default="Notify Specific Groups"),
         required=False,
         value_type=schema.Choice(vocabulary="plone.app.vocabularies.Groups"),
     )
-    
+
     # directives.mode(additional_users='hidden')
     # additional_users = schema.TextLine(
     #     title=_("Additional notification user(s)"),
     #     description=_("Use  '${}' variables list below (for example ${user_id} )"),
     #     required=False
     # )
-    
-    read_permission(time_filter='cmf.ModifyPortalContent')
-    write_permission(time_filter='cmf.ModifyPortalContent')
+
+    read_permission(time_filter="cmf.ModifyPortalContent")
+    write_permission(time_filter="cmf.ModifyPortalContent")
     time_filter = schema.Bool(
         title=_("label_time_filter", default="Show immidiately"),
-        description=_("label_time_filter_desc", default="Show Notifications immidiately"),
+        description=_(
+            "label_time_filter_desc", default="Show Notifications immidiately"
+        ),
         default=True,
-        required=False, 
+        required=False,
     )
-    
-    read_permission(relative_time='cmf.ModifyPortalContent')
-    write_permission(relative_time='cmf.ModifyPortalContent')
+
+    read_permission(relative_time="cmf.ModifyPortalContent")
+    write_permission(relative_time="cmf.ModifyPortalContent")
     relative_time = schema.Time(
         title=_("Time of day"),
         description=_("(From) what time of day, hours:minutes)"),
-        required=False, 
-        
+        required=False,
     )
-    
+
     # directives.widget(
     #     "test",
     #     pattern_options= {"data-pat-depends": "condition: not time_filter" }
-         
+
     # )
     # test = schema.Time(
     #     title=_("Test"),
-    #     required=False,  
+    #     required=False,
     # )
-    
-    read_permission(effective_date='cmf.ModifyPortalContent')
-    write_permission(effective_date='cmf.ModifyPortalContent')
+
+    read_permission(effective_date="cmf.ModifyPortalContent")
+    write_permission(effective_date="cmf.ModifyPortalContent")
     effective_date = schema.Date(
         title=_("Specific date to show notification"),
-        description=_("Effective date."), 
-        required=False, 
-    )    
-    
-    #Maybe a condition would be better ??
-    #If so, it is possible to see who has not seen the Notification
-    directives.mode(notification_assigned='hidden')
+        description=_("Effective date."),
+        required=False,
+    )
+
+    # Maybe a condition would be better ??
+    # If so, it is possible to see who has not seen the Notification
+    directives.mode(notification_assigned="hidden")
     notification_assigned = schema.List(
         title=_("Assigned to (who should see this)"),
         required=False,
         value_type=schema.TextLine(),
         default=[],
-        missing_value=[]
+        missing_value=[],
     )
-    
-    directives.widget(show_title=CheckBoxFieldWidget)    
-    directives.mode(show_title='hidden')
+
+    directives.widget(show_title=CheckBoxFieldWidget)
+    directives.mode(show_title="hidden")
     show_title = schema.Bool(
-            title=_("Show message type (Title)"),
-            required=False,
+        title=_("Show message type (Title)"),
+        required=False,
     )
-    
-    
+
     # show_title = schema.Bool(
     #     title=_("Show message type Title)"),
     #     required=False,
     # )
-    
-    
-    
+
+
 # class INotifications(INotification):
-    
+
 #     directives.mode(additional_users='hidden')
 
-    
-    
 
 @implementer(INotification)
 class Notification(Item):
-    """ Content-type class for INotification
-    """
+    """Content-type class for INotification"""

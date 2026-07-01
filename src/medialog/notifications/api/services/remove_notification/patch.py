@@ -8,6 +8,7 @@ from zope.interface import implementer
 
 # TO DO, should probably be 'PATCH'
 
+
 @implementer(IExpandableElement)
 @adapter(Interface, Interface)
 class RemoveNotification(object):
@@ -18,17 +19,16 @@ class RemoveNotification(object):
 
     def __call__(self, expand=False):
         result = {
-            'remove_notification': {
-                '@id': '{}/@remove_notification'.format(
+            "remove_notification": {
+                "@id": "{}/@remove_notification".format(
                     self.context.absolute_url(),
                 ),
             },
         }
-        
+
         if not expand:
             return result
 
-        
         # TO DO: Not sure why / if we should use try
         try:
             user = api.user.get_current()
@@ -38,9 +38,7 @@ class RemoveNotification(object):
         except Exception as e:
             print(e)
             return False
-             
-        
-        
+
         # return True
 
 
@@ -48,4 +46,4 @@ class RemoveNotificationGet(Service):
 
     def reply(self):
         service_factory = RemoveNotification(self.context, self.request)
-        return service_factory(expand=True)['remove_notification']
+        return service_factory(expand=True)["remove_notification"]

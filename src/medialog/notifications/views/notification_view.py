@@ -8,7 +8,7 @@ from zope.interface import Interface
 
 
 class INotificationView(Interface):
-    """ Marker Interface for INotificationView"""
+    """Marker Interface for INotificationView"""
 
 
 class NotificationView(BrowserView):

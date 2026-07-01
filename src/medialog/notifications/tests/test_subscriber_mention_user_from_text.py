@@ -12,8 +12,8 @@ class SubscriberIntegrationTest(unittest.TestCase):
     layer = MEDIALOG_NOTIFICATIONS_INTEGRATION_TESTING
 
     def setUp(self):
-        self.portal = self.layer['portal']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.portal = self.layer["portal"]
+        setRoles(self.portal, TEST_USER_ID, ["Manager"])
 
 
 class SubscriberFunctionalTest(unittest.TestCase):
@@ -21,5 +21,5 @@ class SubscriberFunctionalTest(unittest.TestCase):
     layer = MEDIALOG_NOTIFICATIONS_FUNCTIONAL_TESTING
 
     def setUp(self):
-        self.portal = self.layer['portal']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.portal = self.layer["portal"]
+        setRoles(self.portal, TEST_USER_ID, ["Manager"])
