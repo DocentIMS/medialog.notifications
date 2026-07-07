@@ -8,8 +8,8 @@ from medialog.notifications.content.notification import INotification
 
 @indexer(IDexterityContent)
 def dummy(obj):
-    """ Dummy to prevent indexing other objects thru acquisition """
-    raise AttributeError('This field should not indexed here!')
+    """Dummy to prevent indexing other objects thru acquisition"""
+    raise AttributeError("This field should not indexed here!")
 
 
 @indexer(INotification)  # ADJUST THIS!

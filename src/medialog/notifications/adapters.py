@@ -3,6 +3,7 @@
 from zope.interface import Interface
 from zope.component import adapter
 from plone.stringinterp.adapters import BaseSubstitution
+
 # from plone import api
 
 
@@ -12,9 +13,9 @@ class NotificationTo(BaseSubstitution):
     description = "Notification To"
 
     def safe_call(self):
-        if hasattr(self.context, 'notification_assigned'):
+        if hasattr(self.context, "notification_assigned"):
             return ", ".join(self.context.notification_assigned)
-        return ''
+        return ""
 
 
 # # testing adding personal settings
@@ -28,13 +29,13 @@ class NotificationTo(BaseSubstitution):
 #     extra fields.
 #     """
 
-#     buttonsEnabled = schema.Bool(title=u'Transition button widget.', 
+#     buttonsEnabled = schema.Bool(title=u'Transition button widget.',
 #                                 default=True,
 #                                 description=u'Uncheck to remove the transition button box from ALL pages.',
 #                                 required=False
-#                                 )  
-    
-    
+#                                 )
+
+
 # from plone.app.users.browser.personalpreferences import PersonalPreferencesPanelAdapter
 # from zope.interface import implementer
 
@@ -42,7 +43,7 @@ class NotificationTo(BaseSubstitution):
 # class EnhancedUserDataPanelAdapter(PersonalPreferencesPanelAdapter):
 #     """
 #     """
-    
+
 
 #     def get_buttonEnabled(self):
 #         return self.context.getProperty('buttonsEnabled', '')

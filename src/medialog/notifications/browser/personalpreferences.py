@@ -8,7 +8,7 @@
 # rom  plone.app.users.browser import personalpreferences
 # from  plone.app.users.browser.personalpreferences import PersonalPreferencesPanel, IPersonalPreferences
 # from zope import schema
- 
+
 
 # class ICPersonalPreferences(schema):
 #     """Provide schema for personalize form."""
@@ -26,8 +26,7 @@
 #         vocabulary="plone.app.vocabularies.AvailableContentLanguages",
 #         required=False,
 #     )
-    
- 
+
 
 # class PersonalPreferencesPanelAdapter(AccountPanelSchemaAdapter):
 #      schema = ICPersonalPreferences
@@ -39,12 +38,10 @@
 #     form_name = _("legend_personal_details", "Personal Details")
 #     schema = ICPersonalPreferences
 
-   
-
 
 # class PersonalPreferencesConfiglet(PersonalPreferencesPanel):
 #     """Control panel version of the personal preferences panel"""
 
 #     template = ViewPageTemplateFile("account-configlet.pt")
-    
+
 #     tab = "userprefsx"
