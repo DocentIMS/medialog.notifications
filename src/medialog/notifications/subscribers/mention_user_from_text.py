@@ -16,9 +16,7 @@ import re
 # The @ must be at the start of the string or preceded by whitespace
 # (so "foo@bar.com" is skipped), and the username may only contain
 # characters valid in a username, without trailing punctuation.
-MENTION_RE = re.compile(
-    r"(?<![\w.@-])@([A-Za-z0-9_](?:[A-Za-z0-9._-]*[A-Za-z0-9_])?)"
-)
+MENTION_RE = re.compile(r"(?<![\w.@-])@([A-Za-z0-9_](?:[A-Za-z0-9._-]*[A-Za-z0-9_])?)")
 
 
 def handler(obj, event):
