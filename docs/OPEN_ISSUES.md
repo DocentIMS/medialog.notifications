@@ -16,6 +16,10 @@ Last reviewed: 2026-07-07
 - `views/email_notification_view.py` — crashed on a notification with no message
   body and sent spurious "0 notifications" emails. Guarded.
 - `subscribers/notification_handler.py` — use `user.getId()` for consistency.
+- `subscribers/mention_user_from_text.py` — `MENTION_RE` no longer matches the
+  domain part of email addresses (`foo@bar.com`). The `@` must now be at the
+  start of the text or preceded by whitespace, and only valid username
+  characters (no trailing punctuation) are captured.
 
 ## Still open (need a product decision — not yet changed)
 
@@ -36,11 +40,5 @@ notifications — an abuse / DoS / mail-flooding vector. It is presumably meant 
 run from a clock/cron. Decision needed: restrict to `cmf.ManagePortal` (or a
 dedicated permission), confirming the scheduler runs with sufficient rights.
 
-### 3. Mention regex matches email domains
-`subscribers/mention_user_from_text.py`
-
-`MENTION_RE = re.compile(r"@([^\s@][^\s]*)")` also matches the domain part of
-email addresses in text (`foo@bar.com` -> `@bar.com`). Harmless today because
-matches are validated against real users, but it can produce unintended
-mentions if a username collides with a domain fragment. Consider requiring a
-word boundary before `@` (e.g. `(?:^|\s)@(...)`).
+_(Item 3, the mention regex matching email domains, has been fixed — see the
+"Fixed" section above.)_
