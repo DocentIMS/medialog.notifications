@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from plone import api
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
 from zope.component import adapter
 from zope.interface import Interface
 from zope.interface import implementer
+
+logger = logging.getLogger(__name__)
 
 # TO DO, should probably be 'PATCH'
 
@@ -29,14 +33,17 @@ class RemoveNotification(object):
         if not expand:
             return result
 
-        # TO DO: Not sure why / if we should use try
         try:
-            user = api.user.get_current()
-            self.context.notify_users = self.context.notify_users.remove(user)
+            user_id = api.user.get_current().getId()
+            notify_users = set(self.context.notify_users or [])
+            if user_id and user_id in notify_users:
+                notify_users.discard(user_id)
+                self.context.notify_users = notify_users
+                self.context.reindexObject()
             # TO DO: How can we refresh page
             return True
-        except Exception as e:
-            print(e)
+        except Exception:
+            logger.exception("Failed to remove notification for current user")
             return False
 
         # return True

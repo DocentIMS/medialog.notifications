@@ -62,11 +62,15 @@ class EmailNotificationView(BrowserView):
 
             if brains:
                 for brain in brains:
+                    message = getattr(brain.getObject(), "message", None)
+                    if message is None:
+                        continue
                     count += 1
-                    messages += brain.getObject().message.output
+                    messages += message.output
                     messages += "<p>----------------------</p>"
                     # Alternatively, just add the type and date ??
 
+            if count:
                 messagetext = (
                     f"""<div class="notification-viewlet portalMessage statusmessage statusmessage-info alert alert-info">
                       <a title="see noticitions" href="{api.portal.get().absolute_url()}/notifications">

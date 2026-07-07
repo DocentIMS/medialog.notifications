@@ -12,7 +12,11 @@ from zope.schema import getFieldsInOrder
 
 import re
 
-MENTION_RE = re.compile(r"@([^\s@][^\s]*)")
+# Match @username, but NOT the domain part of an email address.
+# The @ must be at the start of the string or preceded by whitespace
+# (so "foo@bar.com" is skipped), and the username may only contain
+# characters valid in a username, without trailing punctuation.
+MENTION_RE = re.compile(r"(?<![\w.@-])@([A-Za-z0-9_](?:[A-Za-z0-9._-]*[A-Za-z0-9_])?)")
 
 
 def handler(obj, event):
@@ -28,8 +32,9 @@ def handler(obj, event):
     # if IDexterityContent.providedBy(obj):
     #     schema = obj.getTypeInfo().lookupSchema()
     if obj.Type() == "Comment":
-        value = obj.text
-        found_usernames.update(MENTION_RE.findall(value))
+        value = getattr(obj, "text", "") or ""
+        if isinstance(value, str):
+            found_usernames.update(MENTION_RE.findall(value))
     else:
         for schema in iterSchemata(obj):
             for name, field in getFieldsInOrder(schema):
@@ -71,8 +76,8 @@ def handler(obj, event):
             # Avoid re-notifying existing users
             existing_notify_users = objekt.notify_users or []
 
-            if notify_users != existing_notify_users:
-                objekt.notify_users = (notify_users,)
+            if set(notify_users) != set(existing_notify_users):
+                objekt.notify_users = set(notify_users)
                 objekt.reindexObject()
         else:
             # Create new notification
