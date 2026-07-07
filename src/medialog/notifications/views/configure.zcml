@@ -6,11 +6,14 @@
 
  <!-- -*- extra stuff goes here -*- -->
 
+  <!-- Emails every user their notification digest: an administrative batch
+       operation, so restrict to Manager (cmf.ManagePortal). A scheduler or
+       admin action must run with sufficient rights to trigger it. -->
   <browser:page
     name="email-notification-view"
     for="plone.base.interfaces.IPloneSiteRoot"
     class=".email_notification_view.EmailNotificationView"
-    permission="zope2.View"
+    permission="cmf.ManagePortal"
     layer="medialog.notifications.interfaces.IMedialogNotificationsLayer"
     />
 

@@ -6,6 +6,7 @@ from zope.interface import Interface
 from Products.CMFPlone.utils import safe_unicode
 from plone.restapi.services import Service
 from plone import api
+from zExceptions import Unauthorized
 
 
 @implementer(IExpandableElement)
@@ -23,6 +24,11 @@ class MentionsView(object):
                     "@id": f"{self.context.absolute_url()}/@mentions_view"
                 }
             }
+
+        # Only authenticated members may list the user directory (fullname +
+        # username). Anonymous visitors must not be able to enumerate users.
+        if api.user.is_anonymous():
+            raise Unauthorized("You must be logged in to list users.")
 
         users = api.user.get_users()
         return [

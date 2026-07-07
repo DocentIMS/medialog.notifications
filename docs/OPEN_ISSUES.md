@@ -20,25 +20,19 @@ Last reviewed: 2026-07-07
   domain part of email addresses (`foo@bar.com`). The `@` must now be at the
   start of the text or preceded by whitespace, and only valid username
   characters (no trailing punctuation) are captured.
+- `api/services/mentions_view/get.py` — the user directory (fullname + username)
+  is now only returned to authenticated members; anonymous requests raise
+  `Unauthorized`. Policy decision: every member may see other members' names.
+- `views/configure.zcml` — `email-notification-view` permission changed from
+  `zope2.View` to `cmf.ManagePortal`, so only a Manager (a scheduler/admin
+  action running with sufficient rights) can trigger the all-users email batch.
 
-## Still open (need a product decision — not yet changed)
+## Still open
 
-### 1. `@mentions_view` leaks the full user directory
-`api/services/mentions_view/get.py` + its `configure.zcml`
+_None — all items from the review have been addressed._
 
-The service is registered with `permission="zope2.View"` and returns every
-user's fullname and username. Any user who can View the site can enumerate all
-accounts. Decision needed: restrict to an authenticated/manager permission, or
-accept the exposure.
-
-### 2. `email-notification-view` can be triggered by any viewer
-`views/email_notification_view.py` + `views/configure.zcml`
-
-Registered `for=IPloneSiteRoot` with `permission="zope2.View"`. Any viewer can
-hit `/@@email-notification-view`, which loops all users and sends each their
-notifications — an abuse / DoS / mail-flooding vector. It is presumably meant to
-run from a clock/cron. Decision needed: restrict to `cmf.ManagePortal` (or a
-dedicated permission), confirming the scheduler runs with sufficient rights.
-
-_(Item 3, the mention regex matching email domains, has been fixed — see the
-"Fixed" section above.)_
+Note on `email-notification-view`: there is no trigger for it anywhere in the
+code (no cron/clock registration). Whatever fires it (an admin action or an
+external scheduler) must now run with Manager rights. If a normal-user action
+should ever kick off the digest, wire that action to run the batch server-side
+rather than exposing this URL to non-managers.
