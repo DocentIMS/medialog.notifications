@@ -28,8 +28,9 @@ def handler(obj, event):
     # if IDexterityContent.providedBy(obj):
     #     schema = obj.getTypeInfo().lookupSchema()
     if obj.Type() == "Comment":
-        value = obj.text
-        found_usernames.update(MENTION_RE.findall(value))
+        value = getattr(obj, "text", "") or ""
+        if isinstance(value, str):
+            found_usernames.update(MENTION_RE.findall(value))
     else:
         for schema in iterSchemata(obj):
             for name, field in getFieldsInOrder(schema):
@@ -71,8 +72,8 @@ def handler(obj, event):
             # Avoid re-notifying existing users
             existing_notify_users = objekt.notify_users or []
 
-            if notify_users != existing_notify_users:
-                objekt.notify_users = (notify_users,)
+            if set(notify_users) != set(existing_notify_users):
+                objekt.notify_users = set(notify_users)
                 objekt.reindexObject()
         else:
             # Create new notification

@@ -44,7 +44,7 @@ def handler(obj, event):
         # Add all users
         userlist = api.user.get_users()
         for user in userlist:
-            notify_users.add(user.id)
+            notify_users.add(user.getId())
 
     notification_assigned = get_users(notify_users).union(
         get_groups(obj.notify_groups or set())
