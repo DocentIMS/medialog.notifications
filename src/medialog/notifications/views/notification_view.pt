@@ -10,11 +10,6 @@
          mes_type python: 'danger' if notification_type == 'error' else notification_type">
 
           <div class="portalMessage statusmessage statusmessage-${notification_type} alert alert-${mes_type}" role="alert">
-            <tal:with-fullname define="membership context/portal_membership;info python:membership.getMemberInfo(user.getId()); fullname info/first_name|info/fullname">
-    Hello <span class="name" tal:content="fullname" />
-            </tal:with-fullname>
-
-
             <p>Message from: <b tal:define="creator context/Creator;
                mtool context/@@plone_tools/membership;
                author python:mtool.getMemberInfo(creator)" tal:content="python:author and author['fullname'] or creator">Author name</b>

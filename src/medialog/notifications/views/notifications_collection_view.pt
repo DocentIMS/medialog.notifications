@@ -26,7 +26,7 @@
                     </td>
                   </tr>
                   <tr>
-                    <td>From: <b tal:define="creator context/Creator;
+                    <td>From: <b tal:define="creator obj/Creator;
                mtool context/@@plone_tools/membership;
                author python:mtool.getMemberInfo(creator)" tal:content="python:author and author['fullname'] or creator">Author name</b>
 
