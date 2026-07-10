@@ -7,7 +7,7 @@
       <metal:block define-macro="content-core">
         <tal:define tal:define="user view/get_user|None">
 
-          <h1>${user/fullname}'s Notifications summary</h1>
+          <h1>${user/fullname}'s Alerts summary</h1>
           <!-- <p>TO DO, show only 'assigned to me'</p> -->
           <!-- <p>TO DO: Should only be possible to delete if it is 'only for me'</p> -->
 
@@ -29,7 +29,7 @@
                     </td>
                   </tr>
                   <tr>
-                    <td>From: <span tal:define="creator context/Creator;
+                    <td>From: <span tal:define="creator obj/Creator;
                mtool context/@@plone_tools/membership;
                author python:mtool.getMemberInfo(creator)" tal:content="python:author and author['fullname'] or creator">Author name</span>
 
