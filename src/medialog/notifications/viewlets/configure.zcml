@@ -6,6 +6,13 @@
 
  <!-- -*- extra stuff goes here -*- -->
 
+  <!-- The alert banner is intentionally NOT auto-rendered as a global
+       viewlet. It used to render on IAboveContentTitle on every page (and
+       duplicated per-item on collection full_view listings). Placement is
+       left to the consuming site so it can show the banner only where it
+       wants it (e.g. the home page). The NotificationViewlet class and
+       notification-viewlet.pt template are kept for sites that still want to
+       register it themselves.
   <browser:viewlet
      name="notification-viewlet"
      for="*"
@@ -15,5 +22,6 @@
      template="notification-viewlet.pt"
      permission="zope2.View"
      />
+  -->
 
 </configure>
