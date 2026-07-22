@@ -25,7 +25,11 @@ class ViewletIntegrationTest(unittest.TestCase):
         api.content.create(self.portal, "Document", "other-document")
         api.content.create(self.portal, "News Item", "newsitem")
 
-    def test_notification_viewlet_is_registered(self):
+    def test_notification_viewlet_is_not_auto_registered(self):
+        # The alert banner is intentionally NOT auto-rendered as a global
+        # viewlet (see viewlets/configure.zcml). Placement is left to the
+        # consuming site, so the abovecontenttitle manager must not carry a
+        # notification-viewlet by default.
         view = BrowserView(self.portal["other-document"], self.request)
         manager_name = "plone.abovecontenttitle"
         alsoProvides(self.request, IMedialogNotificationsLayer)
@@ -40,7 +44,7 @@ class ViewletIntegrationTest(unittest.TestCase):
         my_viewlet = [
             v for v in manager.viewlets if v.__name__ == "notification-viewlet"
         ]  # NOQA: E501
-        self.assertEqual(len(my_viewlet), 1)
+        self.assertEqual(len(my_viewlet), 0)
 
     # XXX would be nice to have this test working:
     # def test_notification_viewlet_is_not_available_on_newsitem(self):
